@@ -92,12 +92,29 @@ window.addEventListener("load", function () {
     }
   }
 
+  class UI {
+    constructor(game) {
+      this.game = game;
+      this.fontSize = 25;
+      this.fontFamily = "Helvetica";
+      this.color = "white";
+    }
+
+    draw(context) {
+      context.fillStyle = this.color;
+      for (let i = 0; i < this.game.ammo; i++) {
+        context.fillRect(20 + 5 * i, 50, 3, 20);
+      }
+    }
+  }
+
   class Game {
     constructor(width, height) {
       this.width = width;
       this.height = height;
       this.player = new Player(this);
       this.input = new InputHanlder(this);
+      this.ui = new UI(this);
       this.keys = [];
       this.ammo = 20;
       this.maxAmmo = 50;
@@ -115,6 +132,7 @@ window.addEventListener("load", function () {
     }
     draw(context) {
       this.player.draw(context);
+      this.ui.draw(context);
     }
   }
 
