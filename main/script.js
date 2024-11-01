@@ -98,6 +98,8 @@ window.addEventListener("load", function () {
       this.x = this.game.width;
       this.speedX = Math.random() * -1.5 - 0.5;
       this.markedForDeletion = false;
+      this.lives = 5;
+      this.score = this.lives;
     }
 
     update() {
@@ -107,6 +109,10 @@ window.addEventListener("load", function () {
     draw(context) {
       context.fillStyle = "red";
       context.fillRect(this.x, this.y, this.width, this.height);
+
+      context.fillStyle = "black";
+      context.font = "20px Helvetica";
+      context.fillText(this.lives, this.x, this.y);
     }
   }
 
@@ -162,6 +168,19 @@ window.addEventListener("load", function () {
       }
       this.enemies.forEach((enemy) => {
         enemy.update();
+        if (this.checkCollision(this.player, enemy)) {
+          enemy.markedForDeletion = true;
+        }
+        this.player.projectiles.forEach((projectile) => {
+          if (this.checkCollision(projectile, enemy)) {
+            enemy.lives--;
+            projectile.markedForDeletion = true;
+            if (enemy.lives <= 0) {
+              enemy.markedForDeletion = true;
+              this.score += enemy.score;
+            }
+          }
+        });
       });
       this.enemies = this.enemies.filter((enemy) => !enemy.markedForDeletion);
       if (this.enemyTimer > this.enemyInterval && !this.gameOver) {
@@ -182,6 +201,15 @@ window.addEventListener("load", function () {
 
     addEnemy() {
       this.enemies.push(new AnglerOne(this));
+    }
+
+    checkCollision(rectOne, rectTwo) {
+      return (
+        rectOne.x < rectTwo.x + rectTwo.width &&
+        rectOne.x + rectOne.width > rectTwo.x &&
+        rectOne.y < rectTwo.y + rectTwo.height &&
+        rectOne.height + rectOne.y > rectTwo.y
+      );
     }
   }
 
