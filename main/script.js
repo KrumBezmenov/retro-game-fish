@@ -146,6 +146,31 @@ window.addEventListener("load", function () {
         context.fillRect(20 + 5 * i, 50, 3, 20);
       }
 
+      if (this.game.gameOver) {
+        context.textAlign = "center";
+        let messageOne;
+        let messageTwo;
+        if (this.game.score > this.game.winningScore) {
+          messageOne = "You Win!";
+          messageTwo = "Well Done!";
+        } else {
+          messageOne = "You Lose!";
+          messageTwo = "Try Again Next Time!";
+        }
+        context.font = "50px " + this.fontFamily;
+        context.fillText(
+          messageOne,
+          this.width * 0.5,
+          this.game.height * 0.5 - 40
+        );
+        context.font = "25px " + this.fontFamily;
+        context.fillText(
+          messageTwo,
+          this.width * 0.5,
+          this.game.height * 0.5 + 40
+        );
+      }
+
       context.restore();
     }
   }
