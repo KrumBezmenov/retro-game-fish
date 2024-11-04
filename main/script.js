@@ -125,6 +125,47 @@ window.addEventListener("load", function () {
     }
   }
 
+  class Layer {
+    constructor(game, image, speedModifier) {
+      this.game = game;
+      this.image = image;
+      this.speedModifier = speedModifier;
+      this.width = 1768;
+      this.height = 500;
+      this.x = 0;
+      this.y = 0;
+    }
+    update() {
+      if (this.x <= -this.width) this.x = 0;
+      this.x -= this.game.speed * this.speedModifier;
+    }
+    draw(context) {
+      context.drawImage(this.image, this.x, this.y);
+      context.drawImage(this.image, this.x + this.width, this.y);
+    }
+  }
+
+  class Background {
+    constructor(game) {
+      this.game = game;
+      this.imageOne = document.getElementById("layer1");
+      this.imageTwo = document.getElementById("layer2");
+      this.imageThree = document.getElementById("layer3");
+      this.imageFour = document.getElementById("layer4");
+      this.layerOne = new Layer(this.game, this.imageOne, 0.2);
+      this.layerTwo = new Layer(this.game, this.imageTwo, 0.4);
+      this.layerThree = new Layer(this.game, this.imageThree, 1);
+      this.layerFour = new Layer(this.game, this.imageFour, 1.5);
+      this.layers = [this.layerOne, this.layerTwo, this.layerThree];
+    }
+    update() {
+      this.layers.forEach((layer) => layer.update());
+    }
+    draw(context) {
+      this.layers.forEach((layer) => layer.draw(context));
+    }
+  }
+
   class UI {
     constructor(game) {
       this.game = game;
@@ -180,6 +221,7 @@ window.addEventListener("load", function () {
     constructor(width, height) {
       this.width = width;
       this.height = height;
+      this.background = new Background(this);
       this.player = new Player(this);
       this.input = new InputHanlder(this);
       this.ui = new UI(this);
@@ -196,10 +238,13 @@ window.addEventListener("load", function () {
       this.winningScore = 10;
       this.gameTime = 0;
       this.timeLimit = 5000;
+      this.speed = 1;
     }
     update(deltaTime) {
       if (!this.gameOver) this.gameTime += deltaTime;
       if (this.gameTime > this.timeLimit) this.gameOver = true;
+      this.background.update();
+      this.background.layerFour.update();
       this.player.update();
       if (this.ammoTimer > this.ammoInterval) {
         if (this.ammo < this.maxAmmo) this.ammo++;
@@ -233,12 +278,14 @@ window.addEventListener("load", function () {
       }
     }
     draw(context) {
+      this.background.draw(context);
       this.player.draw(context);
       this.ui.draw(context);
 
       this.enemies.forEach((enemy) => {
         enemy.draw(context);
       });
+      this.background.layerFour.draw(context);
     }
 
     addEnemy() {
