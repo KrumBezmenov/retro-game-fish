@@ -161,13 +161,13 @@ window.addEventListener("load", function () {
         context.font = "50px " + this.fontFamily;
         context.fillText(
           messageOne,
-          this.width * 0.5,
+          this.game.width * 0.5,
           this.game.height * 0.5 - 40
         );
         context.font = "25px " + this.fontFamily;
         context.fillText(
           messageTwo,
-          this.width * 0.5,
+          this.game.width * 0.5,
           this.game.height * 0.5 + 40
         );
       }
@@ -218,7 +218,7 @@ window.addEventListener("load", function () {
             projectile.markedForDeletion = true;
             if (enemy.lives <= 0) {
               enemy.markedForDeletion = true;
-              if (this.game.gameOver) this.score += enemy.score;
+              if (this.gameOver) this.score += enemy.score;
               if (this.score > this.winningScore) this.gameOver = true;
             }
           }
