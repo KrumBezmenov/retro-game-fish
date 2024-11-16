@@ -314,6 +314,20 @@ window.addEventListener("load", function () {
     }
   }
 
+  class BulbWhale extends Enemy {
+    constructor(game) {
+      super(game);
+      this.width = 270;
+      this.height = 219;
+      this.y = Math.random() * (this.game.height * 0.95 - this.height);
+      this.image = document.getElementById("bulbwhale");
+      this.frameY = Math.floor(Math.random() * 2);
+      this.lives = 20;
+      this.score = this.lives;
+      this.speedX = Math.random() * -1.2 - 0.2;
+    }
+  }
+
   class Layer {
     constructor(game, image, speedModifier) {
       this.game = game;
@@ -605,6 +619,7 @@ window.addEventListener("load", function () {
       if (randomize < 0.3) this.enemies.push(new AnglerOne(this));
       else if (randomize < 0.6) this.enemies.push(new AnglerTwo(this));
       else if (randomize < 0.7) this.enemies.push(new HiveWhale(this));
+      else if (randomize < 0.8) this.enemies.push(new BulbWhale(this));
       else this.enemies.push(new LuckyFish(this));
     }
 
